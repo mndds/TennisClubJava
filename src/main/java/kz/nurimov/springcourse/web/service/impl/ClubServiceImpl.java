@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static kz.nurimov.springcourse.web.mapper.ClubMapper.convertToClub;
+import static kz.nurimov.springcourse.web.mapper.ClubMapper.convertToClubDTO;
+
 @Service
 public class ClubServiceImpl implements ClubService {
 
@@ -50,33 +53,6 @@ public class ClubServiceImpl implements ClubService {
     public List<ClubDTO> searchClubs(String query) {
         List<Club> clubs = clubRepository.searchClubs(query);
         return clubs.stream().map(club -> convertToClubDTO(club)).collect(Collectors.toList());
-    }
-
-    private ClubDTO convertToClubDTO(Club club) {
-
-        ClubDTO clubDTO = ClubDTO.builder()
-                .id(club.getId())
-                .title(club.getTitle())
-                .photoUrl(club.getPhotoUrl())
-                .content(club.getContent())
-                .createdAt(club.getCreatedAt())
-                .updatedAt(club.getUpdatedAt())
-                .build();
-
-        return clubDTO;
-    }
-
-    private Club convertToClub(ClubDTO clubDTO) {
-        Club club = Club.builder()
-                .id(clubDTO.getId())
-                .title(clubDTO.getTitle())
-                .photoUrl(clubDTO.getPhotoUrl())
-                .content(clubDTO.getContent())
-                .createdAt(clubDTO.getCreatedAt())
-                .updatedAt(clubDTO.getUpdatedAt())
-                .build();
-
-        return club;
     }
 
 }

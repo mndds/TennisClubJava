@@ -9,6 +9,12 @@ import kz.nurimov.springcourse.web.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static kz.nurimov.springcourse.web.mapper.EventMapper.convertToEvent;
+import static kz.nurimov.springcourse.web.mapper.EventMapper.convertToEventDTO;
+
 @Service
 public class EventServiceImpl implements EventService {
 
@@ -30,16 +36,8 @@ public class EventServiceImpl implements EventService {
         eventRepository.save(event);
     }
 
-    private Event convertToEvent(EventDTO eventDTO) {
-        return Event.builder()
-                .id(eventDTO.getId())
-                .name(eventDTO.getName())
-                .startTime(eventDTO.getStartTime())
-                .endTime(eventDTO.getEndTime())
-                .type(eventDTO.getType())
-                .photoUrl(eventDTO.getPhotoUrl())
-                .createdAt(eventDTO.getCreatedAt())
-                .updatedAt(eventDTO.getUpdatedAt())
-                .build();
+    @Override
+    public List<EventDTO> findAllEvents() {
+        return eventRepository.findAll().stream().map(event -> convertToEventDTO(event)).collect(Collectors.toList());
     }
 }
