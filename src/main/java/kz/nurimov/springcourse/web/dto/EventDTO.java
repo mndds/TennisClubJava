@@ -3,6 +3,7 @@ package kz.nurimov.springcourse.web.dto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import kz.nurimov.springcourse.web.models.Club;
+import kz.nurimov.springcourse.web.models.Event;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,4 +39,6 @@ public class EventDTO {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    private Club club;
 }

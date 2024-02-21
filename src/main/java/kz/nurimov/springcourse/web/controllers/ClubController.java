@@ -15,7 +15,7 @@ import java.util.List;
 
 @Controller
 public class ClubController {
-    private ClubService clubService;
+    private final ClubService clubService;
 
     @Autowired
     public ClubController(ClubService clubService) {
@@ -54,14 +54,14 @@ public class ClubController {
     }
 
     @PostMapping("/clubs/{clubId}/edit")
-    public String updateClub(@PathVariable("clubId") Long clubId, @Valid @ModelAttribute("club") ClubDTO clubDTO, BindingResult bindingResult) {
+    public String updateClub(@PathVariable("clubId") Long clubId, @Valid @ModelAttribute("club") ClubDTO clubDTO, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("club", clubDTO);
             return "clubs-edit";
         }
 
-        clubDTO.setId(clubId);
-        clubService.updateClub(clubDTO);
+        clubService.updateClub(clubId, clubDTO);
         return "redirect:/clubs";
     }
 

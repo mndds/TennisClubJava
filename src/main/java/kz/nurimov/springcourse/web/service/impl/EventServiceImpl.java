@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static kz.nurimov.springcourse.web.mapper.EventMapper.convertToEvent;
@@ -40,4 +41,23 @@ public class EventServiceImpl implements EventService {
     public List<EventDTO> findAllEvents() {
         return eventRepository.findAll().stream().map(event -> convertToEventDTO(event)).collect(Collectors.toList());
     }
+
+    @Override
+    public EventDTO findEventById(Long eventId) {
+        Optional<Event> event = eventRepository.findById(eventId);
+        return convertToEventDTO(event.get());
+    }
+
+    @Override
+    public void updateEvent(EventDTO eventDTO) {
+        Event event = convertToEvent(eventDTO);
+        eventRepository.save(event);
+    }
+
+    @Override
+    public void deleteEvent(Long eventId) {
+        eventRepository.deleteById(eventId);
+    }
+
+
 }

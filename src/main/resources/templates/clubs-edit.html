@@ -14,7 +14,7 @@
     <!-- Page Content-->
     <section layout:fragment="body" class="py-5">
         <div class="container">
-            <h2 class="text-center">Create a Tennis club</h2>
+            <h2 class="text-center">Edit a Tennis club</h2>
 
             <form role="form" method="post" th:action="@{/clubs/{clubId}/edit(clubId=${club.id})}" th:object="${club}">
                 <input type="hidden" th:field="*{id}" />

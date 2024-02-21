@@ -39,7 +39,8 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public void updateClub(ClubDTO clubDTO) {
+    public void updateClub(Long id,ClubDTO clubDTO) {
+        clubDTO.setId(id);
         Club club = convertToClub(clubDTO);
         clubRepository.save(club);
     }

@@ -12,8 +12,9 @@ public class EventMapper {
                 .endTime(eventDTO.getEndTime())
                 .type(eventDTO.getType())
                 .photoUrl(eventDTO.getPhotoUrl())
-                .createdAt(eventDTO.getCreatedAt())
-                .updatedAt(eventDTO.getUpdatedAt())
+                //.createdAt(eventDTO.getCreatedAt())
+                //.updatedAt(eventDTO.getUpdatedAt())
+                .club(eventDTO.getClub())
                 .build();
     }
 
@@ -25,8 +26,9 @@ public class EventMapper {
                 .endTime(event.getEndTime())
                 .type(event.getType())
                 .photoUrl(event.getPhotoUrl())
-                .createdAt(event.getCreatedAt())
-                .updatedAt(event.getUpdatedAt())
+                //.createdAt(event.getCreatedAt())
+                //.updatedAt(event.getUpdatedAt())
+                .club(event.getClub())
                 .build();
     }
 }
