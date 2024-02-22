@@ -2,8 +2,11 @@ package kz.nurimov.springcourse.web.service.impl;
 
 import kz.nurimov.springcourse.web.dto.ClubDTO;
 import kz.nurimov.springcourse.web.models.Club;
+import kz.nurimov.springcourse.web.models.UserEntity;
 import kz.nurimov.springcourse.web.repository.ClubRepository;
+import kz.nurimov.springcourse.web.repository.UserRepository;
 import kz.nurimov.springcourse.web.service.ClubService;
+import kz.nurimov.springcourse.web.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +20,11 @@ import static kz.nurimov.springcourse.web.mapper.ClubMapper.convertToClubDTO;
 public class ClubServiceImpl implements ClubService {
 
     private final ClubRepository clubRepository;
+    private final UserRepository userRepository;
 
-    public ClubServiceImpl(ClubRepository clubRepository) {
+    public ClubServiceImpl(ClubRepository clubRepository, UserRepository userRepository) {
         this.clubRepository = clubRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -29,7 +34,11 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public Club saveClub(ClubDTO clubDTO) {
-        return clubRepository.save(convertToClub(clubDTO));
+        String username = SecurityUtil.getSessionUser();
+        UserEntity user = userRepository.findByUsername(username);
+        Club club = convertToClub(clubDTO);
+        club.setCreatedBy(user);
+        return clubRepository.save(club);
     }
 
     @Override
@@ -40,8 +49,10 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public void updateClub(Long id,ClubDTO clubDTO) {
-        clubDTO.setId(id);
+        String username = SecurityUtil.getSessionUser();
+        UserEntity user = userRepository.findByUsername(username);
         Club club = convertToClub(clubDTO);
+        club.setCreatedBy(user);
         clubRepository.save(club);
     }
 

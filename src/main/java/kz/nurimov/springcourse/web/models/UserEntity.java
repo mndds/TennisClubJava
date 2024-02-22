@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +23,11 @@ public class UserEntity {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    @NotEmpty(message = "Username should not be empty")
-    @Size(min = 2, max = 100, message = "Username should be more than 2 and less than 100 charachters")
     private String username;
 
-    @NotEmpty
     @Column(name = "email")
     private String email;
 
-    @NotEmpty
     @Column(name = "password")
     private String password;
 

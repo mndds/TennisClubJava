@@ -5,6 +5,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
 import kz.nurimov.springcourse.web.models.Event;
+import kz.nurimov.springcourse.web.models.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +31,8 @@ public class ClubDTO {
 
     @NotEmpty(message = "Content should not be empty")
     public String content;
+
+    private UserEntity createdBy;
 
     private LocalDateTime createdAt;
 

@@ -34,6 +34,10 @@ public class Club {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "created_by", nullable = false)
+    private UserEntity createdBy;
+
     @OneToMany(mappedBy = "club", cascade = CascadeType.REMOVE)
     private List<Event> events;
 }
