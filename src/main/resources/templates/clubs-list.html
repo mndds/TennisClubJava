@@ -29,7 +29,9 @@ layout:decorate="~{layout}">
                         <a th:text="${club.getTitle()}" class="h3 fw-bolder text-decoration-none link-dark stretched-link" href="#!">Project name</a>
                     </div>
                     <a th:href="@{/clubs/{clubId}(clubId=${club.id})}" class="btn btn-primary">View</a>
-                    <a th:href="@{/clubs/{clubId}/edit(clubId=${club.id})}" class="btn btn-primary">Edit</a>
+                    <div th:if="${user.id} == ${club.createdBy.id}">
+                        <a th:href="@{/clubs/{clubId}/edit(clubId=${club.id})}" class="btn btn-primary">Edit</a>
+                    </div>
                 </div>
             </div>
         </div>

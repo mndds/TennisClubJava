@@ -3,7 +3,11 @@ package kz.nurimov.springcourse.web.controllers;
 import jakarta.validation.Valid;
 import kz.nurimov.springcourse.web.dto.EventDTO;
 import kz.nurimov.springcourse.web.models.Event;
+import kz.nurimov.springcourse.web.models.UserEntity;
+import kz.nurimov.springcourse.web.repository.UserRepository;
 import kz.nurimov.springcourse.web.service.EventService;
+import kz.nurimov.springcourse.web.service.UserService;
+import kz.nurimov.springcourse.web.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,15 +23,24 @@ import java.util.List;
 public class EventController {
 
     private final EventService eventService;
+    private final UserService userService;
 
     @Autowired
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService, UserService userService) {
         this.eventService = eventService;
+        this.userService = userService;
     }
 
     @GetMapping("/events")
     public String eventList(Model model) {
+        UserEntity user = new UserEntity();
         List<EventDTO> events = eventService.findAllEvents();
+        String username = SecurityUtil.getSessionUser();
+        if (username != null) {
+            user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+        model.addAttribute("user", user);
         model.addAttribute("events", events);
         return "events-list";
     }
@@ -52,7 +65,15 @@ public class EventController {
 
     @GetMapping("/events/{eventId}")
     public String viewEvent(@PathVariable("eventId") Long eventId, Model model) {
+        UserEntity user = new UserEntity();
         EventDTO event = eventService.findEventById(eventId);
+        String username = SecurityUtil.getSessionUser();
+        if (username != null) {
+            user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+        model.addAttribute("club",event);
+        model.addAttribute("user", user);
         model.addAttribute("event", event);
         return "events-detail";
     }
