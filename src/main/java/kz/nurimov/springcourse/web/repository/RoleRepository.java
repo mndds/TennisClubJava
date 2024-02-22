@@ -1,6 +1,5 @@
 package kz.nurimov.springcourse.web.repository;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
 import kz.nurimov.springcourse.web.models.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

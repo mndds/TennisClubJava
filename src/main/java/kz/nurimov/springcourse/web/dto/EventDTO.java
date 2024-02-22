@@ -1,13 +1,11 @@
 package kz.nurimov.springcourse.web.dto;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import kz.nurimov.springcourse.web.models.Club;
 import kz.nurimov.springcourse.web.models.Event;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,7 +17,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EventDTO {
-
     private Long id;
 
     @NotEmpty(message = "Name should not be empty")
@@ -38,7 +35,10 @@ public class EventDTO {
     private String photoUrl;
 
     private LocalDateTime createdAt;
+
     private LocalDateTime updatedAt;
 
-    private Club club;
+    private Long clubId;
+
+    private Long clubCreatedById;
 }

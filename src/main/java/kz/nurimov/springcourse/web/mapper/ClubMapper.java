@@ -3,63 +3,59 @@ package kz.nurimov.springcourse.web.mapper;
 import kz.nurimov.springcourse.web.dto.ClubDTO;
 import kz.nurimov.springcourse.web.models.Club;
 import kz.nurimov.springcourse.web.models.Event;
+import kz.nurimov.springcourse.web.service.ClubService;
+import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static kz.nurimov.springcourse.web.mapper.EventMapper.convertToEvent;
-import static kz.nurimov.springcourse.web.mapper.EventMapper.convertToEventDTO;
 
-public class ClubMapper {
-    public static ClubDTO convertToClubDTO(Club club) {
-
-        ClubDTO clubDTO = ClubDTO.builder()
-                .id(club.getId())
-                .title(club.getTitle())
-                .photoUrl(club.getPhotoUrl())
-                .content(club.getContent())
-                .createdBy(club.getCreatedBy())
-                .createdAt(club.getCreatedAt())
-                .updatedAt(club.getUpdatedAt())
-                .events(club.getEvents().stream().map(event -> convertToEventDTO(event)).collect(Collectors.toList()))
-                .build();
-
-        return clubDTO;
-    }
-
-//    public static Club convertToClub(ClubDTO clubDTO) {
-//        Club club = Club.builder()
-//                .id(clubDTO.getId())
-//                .title(clubDTO.getTitle())
-//                .photoUrl(clubDTO.getPhotoUrl())
-//                .content(clubDTO.getContent())
-//                //.createdAt(clubDTO.getCreatedAt())
-//                //.updatedAt(clubDTO.getUpdatedAt())
-//                .events(clubDTO.getEvents().stream().map(eventDTO -> convertToEvent(eventDTO)).collect(Collectors.toList()))
-//                .build();
+//public class ClubMapper {
 //
+//    public static ClubDTO convertToClubDTO(Club club) {
+//
+//        return ClubDTO.builder()
+//                .id(club.getId())
+//                .title(club.getTitle())
+//                .photoUrl(club.getPhotoUrl())
+//                .content(club.getContent())
+//                .createdAt(club.getCreatedAt())
+//                .updatedAt(club.getUpdatedAt())
+//                .createdById(club.getCreatedBy() != null ? club.getCreatedBy().getId() : null)
+//                .events(club.getEvents() != null ? club.getEvents().stream()
+//                        .map(EventMapper::convertToEventDTO)
+//                        .collect(Collectors.toList()) : null)
+//                .build();
+//    }
+//
+//    public static Club convertToClub(ClubDTO clubDTO) {
+//        Club club = new Club();
+//        club.setId(clubDTO.getId());
+//        club.setTitle(clubDTO.getTitle());
+//        club.setPhotoUrl(clubDTO.getPhotoUrl());
+//        club.setContent(clubDTO.getContent());
+//        club.setCreatedAt(clubDTO.getCreatedAt());
+//        club.setUpdatedAt(clubDTO.getUpdatedAt());
 //        return club;
 //    }
+//
+//}
 
-    public static Club convertToClub(ClubDTO clubDTO) {
-        List<Event> events = Optional.ofNullable(clubDTO.getEvents())
-                .orElse(Collections.emptyList())
-                .stream()
-                .map(EventMapper::convertToEvent)
-                .collect(Collectors.toList());
+@Mapper(componentModel = "spring", uses = {EventMapper.class})
+public interface ClubMapper {
+    @Mapping(source = "createdBy.id", target = "createdById")
+    @Mapping(target = "events", source = "events")
+    ClubDTO clubToClubDTO(Club club);
 
-        return Club.builder()
-                .id(clubDTO.getId())
-                .title(clubDTO.getTitle())
-                .photoUrl(clubDTO.getPhotoUrl())
-                .content(clubDTO.getContent())
-                .createdBy(clubDTO.getCreatedBy())
-                .createdAt(clubDTO.getCreatedAt())
-                .updatedAt(clubDTO.getUpdatedAt())
-                .events(events)
-                .build();
-    }
+    @Mapping(source = "createdById", target = "createdBy.id")
+    @InheritInverseConfiguration(name = "clubToClubDTO")
+    Club clubDTOToClub(ClubDTO clubDTO);
 
+    List<ClubDTO> clubsToClubDTOs(List<Club> clubs);
+
+    List<Club> clubDTOsToClubs(List<ClubDTO> clubDTOs);
 }

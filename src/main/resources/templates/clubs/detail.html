@@ -34,8 +34,11 @@
                             <h2 class="card-title">About club</h2>
                             <p class="card-text" th:text="${club.content}"></p>
 
-                            <div th:if="${user.id} == ${club.createdBy.id}">
-                                <a class="btn btn-primary" th:href="@{/clubs/{clubId}/delete(clubId=${club.id})}">Delete</a>
+                            <div th:if="${user.id} == ${club.createdById}">
+                                <form method="post" th:action="@{/clubs/{clubId}/delete(clubId=${club.id})}">
+                                    <button class="btn btn-primary" type="submit">Delete</button>
+<!--                                    <a class="btn btn-primary" th:href="@{/clubs/{clubId}/delete(clubId=${club.id})}">Delete</a>-->
+                                </form>
                                 <a class="btn btn-primary" th:href="@{/events/{clubId}/new(clubId=${club.id})}">Create Event</a>
                             </div>
                         </div>

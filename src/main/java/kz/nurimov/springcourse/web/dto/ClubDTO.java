@@ -1,8 +1,10 @@
 package kz.nurimov.springcourse.web.dto;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import kz.nurimov.springcourse.web.models.Event;
 import kz.nurimov.springcourse.web.models.UserEntity;
@@ -32,11 +34,12 @@ public class ClubDTO {
     @NotEmpty(message = "Content should not be empty")
     public String content;
 
-    private UserEntity createdBy;
-
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
+    private Long createdById;
+
+    @Valid
     private List<EventDTO> events;
 }

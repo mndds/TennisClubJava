@@ -1,4 +1,5 @@
 <html
+        lang="en"
         xmlns:th="http://thymeleaf.org"
         xmlns:layout="http://www.ultraq.net.z/thymeleaf/layout"
         layout:decorate="~{layout}">
@@ -34,8 +35,10 @@
                             <h2 class="card-title">About this event</h2>
                             <p class="card-text" th:text="${event.type}"></p>
 
-                            <div th:if="${user.id} == ${event.club.createdBy.id}">
-                                <a class="btn btn-primary" th:href="@{/events/{eventId}/delete(eventId=${event.id})}">Delete</a>
+                            <div th:if="${user.id} == ${event.clubCreatedById}">
+                                <form th:action="@{/events/{eventId}/delete(eventId=${event.id})}" method="post">
+                                    <button class="btn btn-primary">Delete</button>
+                                </form>
                             </div>
                         </div>
                     </div>

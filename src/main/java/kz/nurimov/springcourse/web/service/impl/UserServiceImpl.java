@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setEmail(registrationDTO.getEmail());
         userEntity.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
         Role role = roleRepository.findByName("USER");
-        userEntity.setRoles(Arrays.asList(role));
+        userEntity.setRoles(Collections.singletonList(role));
         userRepository.save(userEntity);
     }
 
@@ -43,10 +43,7 @@ public class UserServiceImpl implements UserService {
     public boolean isUserExists(RegistrationDTO registrationDTO) {
         UserEntity existingUserEmail = userRepository.findByEmail(registrationDTO.getEmail());
 
-        if (existingUserEmail != null && existingUserEmail.getEmail() != null && !existingUserEmail.getEmail().isEmpty()) {
-            return true;
-        }
-        return false;
+        return existingUserEmail != null && existingUserEmail.getEmail() != null && !existingUserEmail.getEmail().isEmpty();
     }
 
     @Override

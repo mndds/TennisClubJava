@@ -18,6 +18,7 @@
 
             <form role="form" method="post" th:action="@{/events/{eventId}/edit(eventId=${event.id})}" th:object="${event}">
                 <input type="hidden" th:field="*{id}" />
+                <input type="hidden" th:field="*{clubId}" />
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
                     <input th:field="*{name}"
