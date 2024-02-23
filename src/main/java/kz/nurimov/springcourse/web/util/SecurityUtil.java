@@ -10,11 +10,10 @@ public class SecurityUtil {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
 
-            Object principal = authentication.getPrincipal();
+            //You can send object
+            //Object principal = authentication.getPrincipal();
 
-
-            String currentUsername = authentication.getName();
-            return currentUsername;
+            return authentication.getName();
         }
         return null;
     }

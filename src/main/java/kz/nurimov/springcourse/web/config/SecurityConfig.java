@@ -1,6 +1,7 @@
 package kz.nurimov.springcourse.web.config;
 
-import kz.nurimov.springcourse.web.service.CustomUserDetailsService;
+import kz.nurimov.springcourse.web.models.Role;
+import kz.nurimov.springcourse.web.service.impl.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +17,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-
     private final CustomUserDetailsService userDetailsService;
 
     @Autowired
@@ -27,14 +27,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Config Spring Security
-        // Config Authorization
         http.
-                csrf(csrf->csrf.disable()).
                 authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                                .requestMatchers("/login", "/registration", "/clubs", "/css/**", "/js/**").permitAll()
-                                .anyRequest().authenticated())
+                                .requestMatchers("/login", "/registration", "/clubs","/","/clubs/search", "/css/**", "/js/**").permitAll()
+                                .anyRequest().hasAnyAuthority("USER", "ADMIN"))
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/process_login")

@@ -16,5 +16,5 @@ public interface EventService {
 
     void deleteEvent(Long eventId);
 
-
+    boolean isUserEventOwner(Long eventId, String username);
 }

@@ -7,34 +7,6 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-//public class EventMapper {
-//    public static EventDTO convertToEventDTO(Event event) {
-//        return EventDTO.builder()
-//                .id(event.getId())
-//                .name(event.getName())
-//                .startTime(event.getStartTime())
-//                .endTime(event.getEndTime())
-//                .type(event.getType())
-//                .photoUrl(event.getPhotoUrl())
-//                .createdAt(event.getCreatedAt())
-//                .updatedAt(event.getUpdatedAt())
-//                .clubId(event.getClub() != null ? event.getClub().getId() : null)
-//                .build();
-//    }
-//
-//    public static Event convertToEvent(EventDTO eventDTO) {
-//        Event event = new Event();
-//        event.setId(eventDTO.getId());
-//        event.setName(eventDTO.getName());
-//        event.setStartTime(eventDTO.getStartTime());
-//        event.setEndTime(eventDTO.getEndTime());
-//        event.setType(eventDTO.getType());
-//        event.setPhotoUrl(eventDTO.getPhotoUrl());
-//        // Связь с club требует дополнительной логики для обработки
-//        return event;
-//    }
-//}
-
 @Mapper(componentModel = "spring")
 public interface EventMapper {
 

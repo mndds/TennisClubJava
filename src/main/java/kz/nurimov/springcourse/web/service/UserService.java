@@ -1,12 +1,24 @@
 package kz.nurimov.springcourse.web.service;
 
-import kz.nurimov.springcourse.web.dto.RegistrationDTO;
-import kz.nurimov.springcourse.web.models.UserEntity;
+import kz.nurimov.springcourse.web.dto.UserDTO;
+import kz.nurimov.springcourse.web.dto.UserRegistrationDTO;
+import kz.nurimov.springcourse.web.dto.UserUpdateDTO;
+
+import java.util.List;
 
 public interface UserService {
-    void saveUser(RegistrationDTO registrationDTO);
 
-    boolean isUserExists(RegistrationDTO registrationDTO);
+    List<UserDTO> findAllUsers();
 
-    UserEntity findByUsername(String username);
+    UserDTO findUserById(Long userId);
+
+    void registerNewUser(UserRegistrationDTO registrationDTO);
+
+    void updateUser(Long userId, UserUpdateDTO updateDTO);
+
+    void deleteUser(Long userId);
+
+    boolean isUserExists(UserRegistrationDTO user);
+
+    UserDTO findByUsername(String username);
 }

@@ -5,6 +5,7 @@ import kz.nurimov.springcourse.web.dto.EventDTO;
 import kz.nurimov.springcourse.web.mapper.EventMapper;
 import kz.nurimov.springcourse.web.models.Club;
 import kz.nurimov.springcourse.web.models.Event;
+import kz.nurimov.springcourse.web.models.UserEntity;
 import kz.nurimov.springcourse.web.repository.ClubRepository;
 import kz.nurimov.springcourse.web.repository.EventRepository;
 import kz.nurimov.springcourse.web.service.EventService;
@@ -21,7 +22,6 @@ import java.util.stream.Collectors;
 public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
-
     private final ClubRepository clubRepository;
 
     @Autowired
@@ -86,6 +86,16 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Event not found with id " + id));
         eventRepository.delete(event);
+    }
+
+    @Override
+    public boolean isUserEventOwner(Long eventId, String username) {
+        return eventRepository.findById(eventId)
+                .map(Event::getClub)
+                .map(Club::getCreatedBy)
+                .map(UserEntity::getUsername)
+                .filter(ownerUsername -> ownerUsername.equals(username))
+                .isPresent();
     }
 
 

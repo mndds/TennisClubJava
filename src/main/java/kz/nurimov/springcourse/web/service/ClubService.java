@@ -1,6 +1,7 @@
 package kz.nurimov.springcourse.web.service;
 
 import kz.nurimov.springcourse.web.dto.ClubDTO;
+import kz.nurimov.springcourse.web.dto.UserDTO;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface ClubService {
     void deleteClub(Long clubId);
 
     List<ClubDTO> searchClubs(String query);
+
+    boolean isUserClubOwner(Long clubId, String username);
 }

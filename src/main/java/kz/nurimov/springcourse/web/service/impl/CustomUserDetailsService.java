@@ -1,7 +1,8 @@
-package kz.nurimov.springcourse.web.service;
+package kz.nurimov.springcourse.web.service.impl;
 
 import kz.nurimov.springcourse.web.models.UserEntity;
 import kz.nurimov.springcourse.web.repository.UserRepository;
+import kz.nurimov.springcourse.web.security.PersonDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -24,17 +25,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByUsername(username);
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        } else {
-            User authUser = new User(
-                    user.getUsername(),
-                    user.getPassword(),
-                    user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList())
-            );
-            return authUser;
-        }
+        return new PersonDetails(user);
     }
 }

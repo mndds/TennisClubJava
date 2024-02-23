@@ -1,13 +1,18 @@
 package kz.nurimov.springcourse.web.controllers;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import kz.nurimov.springcourse.web.dto.ClubDTO;
 import kz.nurimov.springcourse.web.dto.EventDTO;
+import kz.nurimov.springcourse.web.dto.UserDTO;
 import kz.nurimov.springcourse.web.models.Event;
 import kz.nurimov.springcourse.web.models.UserEntity;
 import kz.nurimov.springcourse.web.service.EventService;
 import kz.nurimov.springcourse.web.service.UserService;
 import kz.nurimov.springcourse.web.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,7 +23,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/events")
 public class EventController {
-
     private final EventService eventService;
     private final UserService userService;
 
@@ -30,30 +34,36 @@ public class EventController {
 
     @GetMapping()
     public String eventList(Model model) {
-        UserEntity user = new UserEntity();
-        List<EventDTO> events = eventService.findAllEvents();
+
+        UserDTO userDTO = new UserDTO();
         String username = SecurityUtil.getSessionUser();
+
         if (username != null) {
-            user = userService.findByUsername(username);
-            model.addAttribute("user", user);
+            userDTO = userService.findByUsername(username);
         }
-        model.addAttribute("user", user);
+        model.addAttribute("user", userDTO);
+
+        List<EventDTO> events = eventService.findAllEvents();
         model.addAttribute("events", events);
+
         return "events/list";
     }
 
     @GetMapping("/{eventId}")
     public String viewEvent(@PathVariable("eventId") Long eventId, Model model) {
-        UserEntity user = new UserEntity();
-        EventDTO event = eventService.findEventById(eventId);
+
+        UserDTO userDTO = new UserDTO();
         String username = SecurityUtil.getSessionUser();
+
         if (username != null) {
-            user = userService.findByUsername(username);
-            model.addAttribute("user", user);
+            userDTO = userService.findByUsername(username);
         }
-        model.addAttribute("club",event);
-        model.addAttribute("user", user);
+
+        EventDTO event = eventService.findEventById(eventId);
+        model.addAttribute("user", userDTO);
         model.addAttribute("event", event);
+        model.addAttribute("club",event);
+
         return "events/detail";
     }
 
@@ -75,8 +85,6 @@ public class EventController {
         return "redirect:/clubs/" + clubId;
     }
 
-
-
     @GetMapping("/{eventId}/edit")
     public String editEvent(@PathVariable("eventId") Long eventId, Model model) {
         EventDTO event = eventService.findEventById(eventId);
@@ -86,6 +94,11 @@ public class EventController {
 
     @PostMapping("/{eventId}/edit")
     public String updateEvent(@PathVariable("eventId") Long eventId, @Valid @ModelAttribute("event") EventDTO eventDTO, BindingResult bindingResult, Model model) {
+
+        if (!eventService.isUserEventOwner(eventId, SecurityUtil.getSessionUser())) {
+            return "redirect:/events/" + eventId + "/edit";
+        }
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("event", eventDTO);
             return "events/edit";
@@ -102,6 +115,10 @@ public class EventController {
         return "redirect:/events";
     }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handleEntityNotFound(EntityNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
 
 
 }
