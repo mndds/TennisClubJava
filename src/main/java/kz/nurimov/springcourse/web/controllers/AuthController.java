@@ -29,7 +29,15 @@ public class AuthController {
 
     @GetMapping("/")
     public String home(Model model, @AuthenticationPrincipal PersonDetails currentUser) {
-        model.addAttribute("username", currentUser.getUsername());
+
+        if (currentUser != null) {
+            String username = currentUser.getUsername();
+
+            if (username != null && !username.isEmpty()) {
+                model.addAttribute("username", username);
+            }
+        }
+
         return "home";
     }
 
